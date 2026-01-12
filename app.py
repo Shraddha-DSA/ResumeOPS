@@ -40,7 +40,7 @@ uploaded_file = st.file_uploader("📎 Upload Resume (PDF only)", type=["pdf"])
 
 
 if uploaded_file and job_role:
-    with st.spinner("Analyzing resume with AI..."):
+    with st.spinner("Analyzing your resume...."):
 
         resume_text = extract_text_from_pdf(uploaded_file)
         raw_result = analyze_resume(resume_text, job_role)
