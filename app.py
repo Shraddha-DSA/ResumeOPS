@@ -48,6 +48,9 @@ if uploaded_file and job_role:
         
         try:
             result = extract_json(raw_result)
+            if result.get("service_status") == "busy":
+                st.warning("Service is busy right now. Please retry again in a few minutes.")
+                st.stop()
         except Exception as e:
             st.error(" Failed to parse AI response")
             st.exception(e)
