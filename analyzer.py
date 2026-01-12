@@ -1,9 +1,7 @@
 from google import genai
-from dotenv import load_dotenv
+
 import os
 from prompt import resume_analysis_prompt
-
-load_dotenv()
 
 client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
 
