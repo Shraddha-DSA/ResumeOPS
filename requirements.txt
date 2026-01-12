@@ -1,0 +1,7 @@
+streamlit
+google-generativeai
+google-genai
+PyPDF2
+reportlab
+scikit-learn
+numpy
