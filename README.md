@@ -5,7 +5,6 @@ AI-Powered ATS Resume Analyzer
 - ATS compatibility scoring
 - Role-specific resume analysis
 - Skill gap detection
-- Bullet point improvements
 - Project & roadmap suggestions
 - Active job links
 - Downloadable PDF report
