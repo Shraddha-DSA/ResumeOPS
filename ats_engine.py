@@ -6,27 +6,12 @@ from sklearn.metrics.pairwise import cosine_similarity
 from google import genai
 import os
 
-
-# =====================================================
-# Gemini client (ONLY for role → skill ontology)
-# =====================================================
-
 client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
-
-
-# =====================================================
-# Utilities
-# =====================================================
 
 def clean_text(text: str) -> str:
     text = text.lower()
     text = re.sub(r"[^a-z0-9\s]", " ", text)
     return re.sub(r"\s+", " ", text).strip()
-
-
-# =====================================================
-# Skill synonyms (VERY IMPORTANT)
-# =====================================================
 
 SYNONYMS = {
     "machine learning": ["ml"],
@@ -40,10 +25,6 @@ SYNONYMS = {
     "continuous deployment": ["cd"]
 }
 
-
-# =====================================================
-# Role → Skill Generator (LLM, cached)
-# =====================================================
 
 @lru_cache(maxsize=64)
 def generate_role_skills(job_role: str):
@@ -81,9 +62,6 @@ def generate_role_skills(job_role: str):
     return json.loads(text[start:end])
 
 
-# =====================================================
-# Skill matching (forgiving like real ATS)
-# =====================================================
 
 def skill_match(skill: str, resume_text: str) -> bool:
     # direct match
@@ -103,10 +81,6 @@ def skill_match(skill: str, resume_text: str) -> bool:
     return False
 
 
-# =====================================================
-# Keyword score (core + partial)
-# =====================================================
-
 def keyword_score(resume_text: str, skills: list):
     matched, missing = [], []
 
@@ -120,10 +94,6 @@ def keyword_score(resume_text: str, skills: list):
     return round(score, 2), matched, missing
 
 
-# =====================================================
-# Semantic similarity (resume vs skill corpus)
-# =====================================================
-
 def semantic_score(resume_text: str, skills: list):
     corpus = [" ".join(skills), resume_text]
 
@@ -134,9 +104,6 @@ def semantic_score(resume_text: str, skills: list):
     return round(sim * 100, 2)
 
 
-# =====================================================
-# Resume structure score
-# =====================================================
 
 def structure_score(resume_text: str):
     sections = ["experience", "education", "skills", "projects"]
@@ -145,10 +112,6 @@ def structure_score(resume_text: str):
     # forgiving structure scoring
     return round((found / len(sections)) * 100, 2)
 
-
-# =====================================================
-# FINAL ATS SCORE (REALISTIC)
-# =====================================================
 
 def calculate_ats_score_role_only(resume_text: str, job_role: str):
     resume_text = clean_text(resume_text)
